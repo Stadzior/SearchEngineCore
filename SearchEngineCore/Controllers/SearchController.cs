@@ -15,29 +15,24 @@ namespace SearchEngineCore.Controllers
             {
                 new SearchResult
                 {
-                    Url = "hue.pl",
+                    Url = "http://hue.pl",
                     PageRank = 0.1f,
-                    MatchedWords = new (string, int)[] { ("abc",2), ("bca", 3) }
+                    MatchedWords = new string[] { "abc", "bca" }
                 },
                 new SearchResult
                 {
-                    Url = "hue.com",
+                    Url = "http://hue.com",
                     PageRank = 0.5f,
-                    MatchedWords = new (string, int)[] { ("cba",4), ("bac", 5) }
+                    MatchedWords = new string[] { "cba", "bac" }
                 }
             };
-            //return Enumerable.Range(1, 5).Select(index => new SearchResult
-            //{
-            //    DateFormatted = DateTime.Now.AddDays(index).ToString("d"),
-            //    TemperatureC = rng.Next(-20, 55),
-            //});
         }
 
         public class SearchResult
         {
             public string Url { get; set; }
             public float PageRank { get; set; }
-            public (string, int)[] MatchedWords { get; set; }
+            public string[] MatchedWords { get; set; }
             public bool FoundMatchInUrl { get; set; }
         }
     }

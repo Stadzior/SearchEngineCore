@@ -10,7 +10,7 @@ interface SearchPage {
 interface SearchResult {
     url: string;
     pageRank: number;
-    matchedWords: [string, number][];
+    matchedWords: string[];
     foundMatchInUrl: boolean;
 }
 
@@ -22,7 +22,6 @@ export class Home extends React.Component<RouteComponentProps<{}>, SearchPage> {
             searchResults: [],
             loading: false
         };
-        this.handleChange = this.handleChange.bind(this);
     }
 
     public render() {
@@ -31,10 +30,8 @@ export class Home extends React.Component<RouteComponentProps<{}>, SearchPage> {
             : this.renderSearchResults(this.state.searchResults);
         return (
             <div>
-                <form onSubmit={this.runSearch}>
-                    <input type="text" value={this.state.searchInput} onChange={this.handleChange}/>
-                    <input type="submit" value="Search" />
-                </form>
+                <input type="text" value={this.state.searchInput} onChange={this.handleChange}/>
+                <button onClick={() => { this.runSearch() }}>Search</button>
                 <h1>Search results:</h1>
                 {contents}
             </div>
@@ -54,13 +51,13 @@ export class Home extends React.Component<RouteComponentProps<{}>, SearchPage> {
             <tbody>
                 {searchResults.map(searchResult =>
                     <tr key={searchResult.url}>
-                        <td>{searchResult.url}</td>
+                        <td><a href={searchResult.url}>{searchResult.url}</a></td>
                         <td>
                             <ul>
-                                {searchResult.matchedWords.map(matchedWord => <li>{matchedWord[0]}: {matchedWord[1]} times</li>)}
+                                {searchResult.matchedWords.map(matchedWord => <li>{String(matchedWord)}</li>)}
                             </ul>
                         </td>
-                        <td>{searchResult.foundMatchInUrl}</td>
+                        <td>{String(searchResult.foundMatchInUrl)}</td>
                         <td>{searchResult.pageRank}</td>
                     </tr>
                 )}
@@ -77,7 +74,8 @@ export class Home extends React.Component<RouteComponentProps<{}>, SearchPage> {
             loading: true
         });
         fetch('api/Search/GetResults')
-            .then(response => response.json() as Promise<SearchResult[]>)
+            .then(response =>
+                response.json() as Promise<SearchResult[]>)
             .then(data => {
                 this.setState({ searchResults: data, loading: false });
             });
