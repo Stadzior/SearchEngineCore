@@ -8,36 +8,37 @@ namespace SearchEngineCore.Controllers
     [Route("api/[controller]")]
     public class SearchController : Controller
     {
-        private static string[] Summaries = new[]
-        {
-            "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-        };
-
         [HttpGet("[action]")]
-        public IEnumerable<WeatherForecast> WeatherForecasts()
+        public IEnumerable<SearchResult> GetResults()
         {
-            var rng = new Random();
-            return Enumerable.Range(1, 5).Select(index => new WeatherForecast
+            return new List<SearchResult>
             {
-                DateFormatted = DateTime.Now.AddDays(index).ToString("d"),
-                TemperatureC = rng.Next(-20, 55),
-                Summary = Summaries[rng.Next(Summaries.Length)]
-            });
+                new SearchResult
+                {
+                    Url = "hue.pl",
+                    PageRank = 0.1f,
+                    MatchedWords = new (string, int)[] { ("abc",2), ("bca", 3) }
+                },
+                new SearchResult
+                {
+                    Url = "hue.com",
+                    PageRank = 0.5f,
+                    MatchedWords = new (string, int)[] { ("cba",4), ("bac", 5) }
+                }
+            };
+            //return Enumerable.Range(1, 5).Select(index => new SearchResult
+            //{
+            //    DateFormatted = DateTime.Now.AddDays(index).ToString("d"),
+            //    TemperatureC = rng.Next(-20, 55),
+            //});
         }
 
-        public class WeatherForecast
+        public class SearchResult
         {
-            public string DateFormatted { get; set; }
-            public int TemperatureC { get; set; }
-            public string Summary { get; set; }
-
-            public int TemperatureF
-            {
-                get
-                {
-                    return 32 + (int)(TemperatureC / 0.5556);
-                }
-            }
+            public string Url { get; set; }
+            public float PageRank { get; set; }
+            public (string, int)[] MatchedWords { get; set; }
+            public bool FoundMatchInUrl { get; set; }
         }
     }
 }
