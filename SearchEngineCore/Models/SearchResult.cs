@@ -3,7 +3,8 @@
     public class SearchResult
     {
         public string Url { get; set; }
-        public float PageRank { get; set; }
+        public double PageRank { get; set; }
+        public double Rating { get; set; }
         public string[] MatchedWords { get; set; }
         public bool FoundMatchInUrl { get; set; }
     }

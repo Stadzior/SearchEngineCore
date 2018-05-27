@@ -9,7 +9,8 @@ interface SearchPage {
 
 interface SearchResult {
     url: string;
-    pageRank: number;
+    PageRank: number;
+    Rating: number;
     matchedWords: string[];
     foundMatchInUrl: boolean;
 }
@@ -46,6 +47,7 @@ export class Home extends React.Component<RouteComponentProps<{}>, SearchPage> {
                     <th>Matched words</th>
                     <th>Found match in title</th>
                     <th>Page rank</th>
+                    <th>Rating</th>
                 </tr>
             </thead>
             <tbody>
@@ -58,7 +60,8 @@ export class Home extends React.Component<RouteComponentProps<{}>, SearchPage> {
                             </ul>
                         </td>
                         <td>{String(searchResult.foundMatchInUrl)}</td>
-                        <td>{searchResult.pageRank}</td>
+                        <td>{String(searchResult.PageRank)}</td>
+                        <td>{String(searchResult.Rating)}</td>
                     </tr>
                 )}
             </tbody>
@@ -73,6 +76,14 @@ export class Home extends React.Component<RouteComponentProps<{}>, SearchPage> {
         this.setState({
             loading: true
         });
+        let searchTokens = this.state.searchInput.replace(' ','+');      
+        let response = fetch('api/Search/GetResults/' + searchTokens)
+            .then(response =>
+                response.json() as Promise<SearchResult[]>)
+            .then(data => {
+                this.setState({ searchResults: data, loading: false });
+            });
+
         fetch('api/Search/GetResults')
             .then(response =>
                 response.json() as Promise<SearchResult[]>)
