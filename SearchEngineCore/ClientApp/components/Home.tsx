@@ -76,15 +76,8 @@ export class Home extends React.Component<RouteComponentProps<{}>, SearchPage> {
         this.setState({
             loading: true
         });
-        let searchTokens = this.state.searchInput.replace(' ','+');      
-        let response = fetch('api/Search/GetResults/' + searchTokens)
-            .then(response =>
-                response.json() as Promise<SearchResult[]>)
-            .then(data => {
-                this.setState({ searchResults: data, loading: false });
-            });
-
-        fetch('api/Search/GetResults')
+        let searchInput = this.state.searchInput.replace(' ','+');      
+        fetch('api/Search?searchInput=' + searchInput)
             .then(response =>
                 response.json() as Promise<SearchResult[]>)
             .then(data => {
