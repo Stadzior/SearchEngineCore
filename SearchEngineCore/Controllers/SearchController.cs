@@ -10,13 +10,13 @@ namespace SearchEngineCore.Controllers
     [Route("api/[controller]")]
     public class SearchController : Controller
     {
-        public IEnumerable<SearchResult> Get(string searchInput)
+        [Route("[action]")]
+        public IEnumerable<SearchResult> GetResults(string searchInput)
         {
             if (searchInput == null)
-                //return new List<SearchResult>();
-                searchInput = "jakoœæ+praca";
+                return new List<SearchResult>();
 
-            var searchTokens = searchInput.Split('+');
+            var searchTokens = searchInput.Split(' ');
             using (var context = new Context("MyIndexedWebDb"))
             {
                 var rawOutput = context.GetResults(searchTokens);

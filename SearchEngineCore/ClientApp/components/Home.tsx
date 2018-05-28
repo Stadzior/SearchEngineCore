@@ -9,8 +9,8 @@ interface SearchPage {
 
 interface SearchResult {
     url: string;
-    PageRank: number;
-    Rating: number;
+    pageRank: string;
+    rating: string;
     matchedWords: string[];
     foundMatchInUrl: boolean;
 }
@@ -24,6 +24,7 @@ export class Home extends React.Component<RouteComponentProps<{}>, SearchPage> {
             loading: false
         };
     }
+
 
     public render() {
         let contents = this.state.loading
@@ -60,27 +61,29 @@ export class Home extends React.Component<RouteComponentProps<{}>, SearchPage> {
                             </ul>
                         </td>
                         <td>{String(searchResult.foundMatchInUrl)}</td>
-                        <td>{String(searchResult.PageRank)}</td>
-                        <td>{String(searchResult.Rating)}</td>
+                        <td>{searchResult.pageRank}</td>
+                        <td>{searchResult.rating}</td>
                     </tr>
                 )}
             </tbody>
         </table>;
     }
 
-    handleChange(event: { target: { value: string; }; }) {
+    handleChange = (event: { target: { value: string; }; }) => {
         this.setState({ searchInput: event.target.value });
     }
 
-    runSearch() {
+    runSearch = () => {
         this.setState({
             loading: true
         });
-        let searchInput = this.state.searchInput.replace(' ','+');      
-        fetch('api/Search?searchInput=' + searchInput)
+        let searchInput = this.state.searchInput.replace(' ', '+');   
+        console.log(searchInput)
+        fetch('api/Search/GetResults?searchInput=' + searchInput)
             .then(response =>
                 response.json() as Promise<SearchResult[]>)
             .then(data => {
+                console.log(data)
                 this.setState({ searchResults: data, loading: false });
             });
     }
